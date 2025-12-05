@@ -1,19 +1,22 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import UserProfile
 
+User = get_user_model()
+
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(required = True)
+    password = serializers.CharField(write_only = True, min_length = 8)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password')
         email = validated_data.pop('email')
         user = User(**validated_data)
+        user.email = email
         user.set_password(password)
         user.save()
 
@@ -21,3 +24,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user, email=email)
 
         return user
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+        read_only_fields = ['id']
