@@ -1,4 +1,4 @@
-from rest_framework.pemissions import BasePermission
+from rest_framework.permissions import BasePermission
 from django.utils import timezone
 from subscriptions.models import Subscription
 
