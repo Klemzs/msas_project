@@ -29,13 +29,13 @@ class MovieSearchView(generics.ListAPIView):
         )
 
 class WatchMovieView(APIView):
-    permission_classes = [permissions.IsAuthenticated, permissions.IsSubscribedUser]
+    permission_classes = [permissions.IsAuthenticated, IsSubscribedUser]
 
     def get(self, request, pk):
         movie = get_object_or_404(movie, pk = pk)
 
         return Response({
-            "movie_id": movie,id,
+            "movie_id": movie.id,
             "title": movie.title,
             "stream_url": f"https://stream.msas.com/movies/{movie.id}/"
         })
