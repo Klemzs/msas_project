@@ -32,7 +32,7 @@ class WatchMovieView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsSubscribedUser]
 
     def get(self, request, pk):
-        movie = get_object_or_404(movie, pk = pk)
+        movie = get_object_or_404(Movie, pk = pk)
 
         return Response({
             "movie_id": movie.id,
