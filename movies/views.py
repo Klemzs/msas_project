@@ -1,11 +1,12 @@
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from django.shortcuts import get_object_or_404
 from .models import Movie, Genre
 from django.db.models import Q
-from .permissions import IsSubscribedUser
+from .permissions import IsSubscribedUser, IsAdminOrReadOnly
 from .serializers import MovieSerializer, GenreSerializer
 
 class MovieListView(generics.ListAPIView):
@@ -45,3 +46,8 @@ class WatchMovieView(APIView):
             "title": movie.title,
             "stream_url": f"https://stream.msas.com/movies/{movie.id}/"
         })
+
+class MovieViewSet(ModelViewSet):
+    queryset = Movie.objects.select_related("genre").all()
+    serializer_class = MovieSerializer
+    permission_classes = [IsAdminOrReadOnly]
