@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 from django.shortcuts import get_object_or_404
 from .models import Movie, Genre
 from django.db.models import Q
@@ -11,6 +12,9 @@ class MovieListView(generics.ListAPIView):
     queryset = Movie.objects.select_related('genre').all()
     serializer_class = MovieSerializer
     permission_classes = [permissions.AllowAny]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['title', 'release_year']
+    ordering = ['title']
 
 class GenreListView(generics.ListAPIView):
     queryset = Genre.objects.all()
@@ -20,6 +24,8 @@ class GenreListView(generics.ListAPIView):
 class MovieSearchView(generics.ListAPIView):
     serializer_class = MovieSerializer
     permission_classes = [permissions.AllowAny]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['title', 'release_year']
 
     def get_queryset(self):
         query = self.request.query_params.get('q', '')
