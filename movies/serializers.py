@@ -1,4 +1,4 @@
-from rest_framework import seializers
+from rest_framework import serializers
 from .models import Genre, Movie
 
 class GenreSerializer(serializers.ModelSerializer):

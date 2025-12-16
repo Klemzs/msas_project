@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView
-from rest_famework.response import Response
+from rest_framework.response import Response
 from django.utils import timezone
 from datetime import timedelta
 from .models import Subscription
@@ -20,7 +20,7 @@ class StartSubscriptionAPIView(APIView):
         existing = subscription.objects.filter(user=user).first()
         if existing and existing.is_active():
             return Response(
-                    {"detail": "You already have an active subscription."}
+                    {"detail": "You already have an active subscription."},
                     status = status.HTTP_400_BAD_REQUEST
                 )
 
@@ -46,7 +46,7 @@ class RenewSubscriptionAPIView(APIView):
         user = request.user
 
         try:
-            subscription = Subscription.objects.get(user = user):
+            subscription = Subscription.objects.get(user = user)
         except Subscription.DoesNotExist:
             return Response(
                     {"detail": "No subscription found to renew."},
@@ -76,7 +76,7 @@ class CheckSubscriptionAPIView(APIView):
             subscription = Subscription.objects.get(user = user)
         except Subscription.DoesNotExist:
             return Response(
-                    {"active": False, "message": "No subscription found."}
+                    {"active": False, "message": "No subscription found."},
                     status = status.HTTP_200_OK
                 )
 
